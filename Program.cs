@@ -27,9 +27,9 @@ Console.WriteLine("Pobieranie Premium? (y/n)");
 if(Console.ReadKey(true).Key == ConsoleKey.Y)
     await Premium(token);
 else
-    await NonPremium(token);
+    await NonPremium();
 
-async Task NonPremium(string token)
+async Task NonPremium()
 {
     od.ChangeHeaders(Headers.NonPremium);
     Console.WriteLine("ID Cionszki:");
@@ -46,7 +46,7 @@ async Task NonPremium(string token)
     try
     {
         Console.WriteLine("Pobieranie rozpoczęte...\nwciśnij 'c' aby anulować");
-        var book = await od.DownloadBookAsync(token, firstpage, lastpage, bookid, ctoken);
+        var book = await od.DownloadBookAsync(firstpage, lastpage, bookid, ctoken);
         await od.SaveBookAsHTMLAsync(book, $"Cionszka-{bookid}");
         Console.WriteLine("Koniec!");
     }
@@ -58,7 +58,7 @@ async Task NonPremium(string token)
 }
 async Task Premium(string token)
 {
-    od.ChangeHeaders(Headers.Premium);
+    od.ChangeHeaders(Headers.Premium, token);
     Console.WriteLine("ID Cionszki:");
     int bookid = int.Parse(Console.ReadLine() ?? "0");
     Console.WriteLine("Strona startowa:");
@@ -73,7 +73,7 @@ async Task Premium(string token)
     try
     {
         Console.WriteLine("Pobieranie rozpoczęte...\nwciśnij 'c' aby anulować");
-        var book = await od.DownloadBookPremiumAsync(token, firstpage, lastpage, bookid, ctoken);
+        var book = await od.DownloadBookPremiumAsync(firstpage, lastpage, bookid, ctoken);
         await od.SaveBookAsHTMLAsync(book, $"Cionszka-{bookid}");
         Console.WriteLine("Koniec!");
     }
